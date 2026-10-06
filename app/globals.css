@@ -3,33 +3,104 @@
 @tailwind utilities;
 
 :root {
-  --bg: #eef2ff; --fg: #0c1330; --muted: #44507a;
-  --glass: rgba(255,255,255,.58); --glass2: rgba(255,255,255,.38); --stroke: rgba(255,255,255,.95);
-  --shadow: rgba(40,60,140,.22); --a: #0891b2; --b: #6d5dfc; --c: #d946ef; --bt: #fff;
+  --bg: #f8fafc; --fg: #0f172a; --muted: #475569;
+  --glass: rgba(255,255,255,.75); --glass2: rgba(255,255,255,.45); --stroke: rgba(226,232,240,.9);
+  --shadow: rgba(15,23,42,.08); --a: #0284c7; --b: #6366f1; --c: #d946ef; --bt: #fff;
 }
 .dark {
-  --bg: #070b16; --fg: #eaf0ff; --muted: #a4b3d4;
-  --glass: rgba(255,255,255,.07); --glass2: rgba(255,255,255,.04); --stroke: rgba(255,255,255,.2);
-  --shadow: rgba(0,0,0,.55); --a: #5ee7ff; --b: #8b7bff; --c: #ff7ad9; --bt: #06101f;
+  --bg: #050814; --fg: #f1f5f9; --muted: #94a3b8;
+  --glass: rgba(15,23,42,.65); --glass2: rgba(30,41,59,.45); --stroke: rgba(255,255,255,.12);
+  --shadow: rgba(0,0,0,.65); --a: #38bdf8; --b: #818cf8; --c: #f472b6; --bt: #050814;
 }
-html { scroll-behavior: smooth; }
-body { background: var(--bg); color: var(--fg); overflow-x: hidden; }
-:focus-visible { outline: 3px solid var(--a); outline-offset: 3px; border-radius: 12px; }
+
+html {
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+:focus-visible {
+  outline: 2px solid var(--a);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
 
 @layer components {
   .glass {
-    border-radius: 1.5rem; border: 1px solid var(--stroke); background: var(--glass);
-    backdrop-filter: blur(16px) saturate(170%); -webkit-backdrop-filter: blur(16px) saturate(170%);
-    box-shadow: 0 24px 50px -18px var(--shadow), inset 0 1px 0 rgba(255,255,255,.45);
+    border-radius: 1.5rem;
+    border: 1px solid var(--stroke);
+    background: var(--glass);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    box-shadow: 0 20px 40px -15px var(--shadow), inset 0 1px 0 rgba(255,255,255,.2);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
   }
+  
+  .glass-hover:hover {
+    border-color: rgba(56, 189, 248, 0.4);
+    box-shadow: 0 25px 50px -12px rgba(56, 189, 248, 0.15);
+  }
+
   .grad-text {
-    background: linear-gradient(100deg, var(--a), var(--b), var(--c), var(--a)); background-size: 250% 100%;
-    -webkit-background-clip: text; background-clip: text; color: transparent; animation: shine 8s linear infinite;
+    background: linear-gradient(110deg, var(--a), var(--b), var(--c), var(--a));
+    background-size: 250% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shine 8s linear infinite;
   }
-  .eyebrow { font-size: .8rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--a); }
-  .container-x { margin-inline: auto; width: min(1160px, calc(100% - 2.5rem)); }
-  .blob { position: absolute; width: 46vmax; height: 46vmax; border-radius: 9999px; filter: blur(90px); opacity: .5; animation: drift 22s ease-in-out infinite alternate; }
+
+  .eyebrow {
+    font-size: .8rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--a);
+  }
+
+  .container-x {
+    margin-inline: auto;
+    width: min(1200px, calc(100% - 2.5rem));
+  }
+
+  /* Hardware-accelerated GPU blobs to eliminate hanging and CPU lag */
+  .blob {
+    position: absolute;
+    width: 48vmax;
+    height: 48vmax;
+    border-radius: 9999px;
+    filter: blur(100px);
+    opacity: .35;
+    will-change: transform;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    animation: drift 24s ease-in-out infinite alternate;
+  }
 }
-@keyframes shine { to { background-position: 250% 0; } }
-@keyframes drift { to { transform: translate(8vmax, 6vmax) scale(1.15); } }
-@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+@keyframes shine {
+  to { background-position: 250% 0; }
+}
+
+@keyframes drift {
+  0% { transform: translate3d(0, 0, 0) scale3d(1, 1, 1); }
+  100% { transform: translate3d(6vmax, 5vmax, 0) scale3d(1.12, 1.12, 1); }
+}
+
+/* 3D card perspective wrapper */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
